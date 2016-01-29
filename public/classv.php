@@ -1,6 +1,8 @@
 <?php
 include "my\classi\myclass.php";
+
 use My\Classi as aaa ;
+
 /*class myc {
 
     function __construct()
