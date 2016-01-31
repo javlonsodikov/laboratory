@@ -1,16 +1,35 @@
 <?php
 include "my\classi\myclass.php";
 
-use My\Classi as aaa ;
+use My\Classi as aaa;
 
-/*class myc {
+class Myc
+{
+    private $a;
 
-    function __construct()
+    public function __construct()
     {
-        classi\myclass::hello();
+        //myclass::hello();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getA()
+    {
+        return $this->a;
+    }
+
+    /**
+     * @param mixed $a
+     */
+    public function setA($a)
+    {
+        $this->a = $a;
     }
 }
-$a = new myc();*/
+
+$a = new myc();
 //my\classi\myclass::hello();
 //classi\myclass::hello();
 $a = new aaa\myclass2();

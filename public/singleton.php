@@ -70,6 +70,22 @@ class Singleton
         echo "isset $name" . PHP_EOL;
         return ($this->{$name} != null ? true : false);
     }
+
+    /**
+     * preventing class from cloning
+     */
+    private function __clone()
+    {
+
+    }
+
+    /**
+     * preventing class from un serialization
+     */
+    private function __wakeup()
+    {
+
+    }
 }
 
 
