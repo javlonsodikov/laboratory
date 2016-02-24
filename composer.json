@@ -1,0 +1,22 @@
+{
+  "name": "javlon/lab",
+  "description": "This project created for laboratory tasks",
+  "minimum-stability": "dev",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Javlon Sodikov",
+      "email": "javlon@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.0",
+    "symfony/symfony": "3.0.x-dev",
+    "monolog/monolog": "^1.17"
+
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.0",
+    "psr/log": "~1.0"
+  }
+}
