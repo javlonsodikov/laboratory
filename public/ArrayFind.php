@@ -3,7 +3,7 @@
  * @param $number
  * @return mixed
  */
-function find($number)
+function findInArray($number)
 {
     $data = [1, 8, 16, 41, 76, 89, 91, 105, 106, 117, 119, 225, 546, 768, 897, 1000, 1100, 1540];
 //            0  1  2   3   4   5   6   7    8   9    10   11   12   13   14   15    16    17
@@ -28,4 +28,4 @@ function find($number)
     return -1;
 }
 
-echo find(2000);
+echo findInArray(2000);
