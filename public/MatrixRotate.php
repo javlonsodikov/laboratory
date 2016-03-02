@@ -94,7 +94,7 @@ function levelAssemble(&$ready, &$rings, $level)
     }
 }
 
-//fining matrix depth
+//finding matrix depth
 $min = ((int)min($h, $w) / 2);
 
 
