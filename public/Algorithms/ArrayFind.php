@@ -18,7 +18,7 @@ function findInArray($number)
             $lo = $middle;
             //echo "Lo:" . $middle . PHP_EOL;
         } elseif ($data[$middle] > $number) {
-            $hi = $middle-1;
+            $hi = $middle - 1;
             //echo "High:" . $middle . PHP_EOL;
         } else {
             //return $data[$middle];

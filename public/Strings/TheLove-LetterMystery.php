@@ -1,5 +1,4 @@
 <?php
-<?php
 $_fp = fopen("php://stdin", "r");
 fscanf($_fp, "%d", $times);
 for($i=0;$i<$times;$i++){
