@@ -9,18 +9,18 @@ for ($i = 0; $i < $times; $i++) {
     $modulo = trim($modulo);
     $a = fgets($_fp);
     $arr = explode(" ", $a);
-    $keep = 0;
-
+    $max = 0;
+    //sort($arr);
     for ($ii = 0; $ii < $size; $ii++) {
         $summ = 0;
-        for ($jj = $ii; $jj < $size; $jj++) {
-            //$summ += $arr[$jj];
-            $summ = bcadd($summ, $arr[$jj]);
-            $mod = bcmod($summ, $modulo);
-            //$mod = fmod($summ, $modulo);
-            if ($keep < $mod) $keep = $mod;
+        for ($jj = $ii+1; $jj < $size; $jj++) {
+            $summ += $arr[$jj];
+            //$summ = bcadd($summ, $arr[$jj]);
+            //$mod = bcmod($summ, $modulo);
+            $mod = fmod($summ, $modulo);
+            if ($max < $mod) $max = $mod;
             //if ($modulo - 1 == $keep) break 2;
         }
     }
-    echo $keep . PHP_EOL;
+    echo $max . PHP_EOL;
 }

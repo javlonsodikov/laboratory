@@ -13,93 +13,99 @@ function changeTo(&$matrix, &$keeper, $fromId, $toId)
     }
 }
 
-function checkid(&$matrix, &$keeper, $x, $y)
+function checkid(&$matrix, &$keeper, $x, $y, &$hops)
 {
     $oid = $matrix[$x][$y]->id;
-    $id = $matrix[$x - 1][$y - 1]->id;
-    $val = $matrix[$x - 1][$y - 1]->val;
-    if ($val == 1 && $id != $oid) {
-        changeTo($matrix, $keeper, $id, $oid);
-    }
+    $jumps = 0;
     $id = $matrix[$x][$y - 1]->id;
     $val = $matrix[$x][$y - 1]->val;
     if ($val == 1 && $id != $oid) {
-        changeTo($matrix, $keeper, $id, $oid);
-    }
-    $id = $matrix[$x + 1][$y - 1]->id;
-    $val = $matrix[$x + 1][$y - 1]->val;
-    if ($val == 1 && $id != $oid) {
-        changeTo($matrix, $keeper, $id, $oid);
+        jumpTo($matrix, $keeper, $id, $oid);
+        $jumps++;
     }
     $id = $matrix[$x - 1][$y]->id;
     $val = $matrix[$x - 1][$y]->val;
     if ($val == 1 && $id != $oid) {
-        changeTo($matrix, $keeper, $id, $oid);
+        jumpTo($matrix, $keeper, $id, $oid);
+        $jumps++;
     }
     $id = $matrix[$x + 1][$y]->id;
     $val = $matrix[$x + 1][$y]->val;
     if ($val == 1 && $id != $oid) {
-        changeTo($matrix, $keeper, $id, $oid);
-    }
-    $id = $matrix[$x - 1][$y + 1]->id;
-    $val = $matrix[$x - 1][$y + 1]->val;
-    if ($val == 1 && $id != $oid) {
-        changeTo($matrix, $keeper, $id, $oid);
+        jumpTo($matrix, $keeper, $id, $oid);
+        $jumps++;
     }
     $id = $matrix[$x][$y + 1]->id;
     $val = $matrix[$x][$y + 1]->val;
     if ($val == 1 && $id != $oid) {
-        changeTo($matrix, $keeper, $id, $oid);
+        jumpTo($matrix, $keeper, $id, $oid);
+        $jumps++;
     }
-    $id = $matrix[$x + 1][$y + 1]->id;
-    $val = $matrix[$x + 1][$y + 1]->val;
-    if ($val == 1 && $id != $oid) {
-        changeTo($matrix, $keeper, $id, $oid);
+    if ($jumps > 1) {
+        $hops++;
+        $matrix[$x][$y + 1]->jumps = $jumps;
     }
+    return array($x, $y);
 }
 
+$matrix = [];
+$entryX = -1;
+$entryY = -1;
+$exitX = -1;
+$exitY = -1;
 if (isset($_SERVER['ENVIRONMENT']) && $_SERVER['ENVIRONMENT'] == 'development') {
 
-    $k[] = array(1, 1, 0, 0, 0);
-    $k[] = array(0, 1, 1, 0, 0);
-    $k[] = array(0, 0, 1, 0, 1);
-    $k[] = array(1, 0, 0, 0, 1);
-    $k[] = array(0, 1, 0, 1, 1);
-    $matrix = [];
+    $k[] = str_split(str_replace(".", "1", str_replace("X", "0", ".X.X......X")));
+    $k[] = str_split(str_replace(".", "1", str_replace("X", "0", ".X*.X.XXX.X")));
+    $k[] = str_split(str_replace(".", "1", str_replace("X", "0", ".XX.X.XM...")));
+    $k[] = str_split(str_replace(".", "1", str_replace("X", "0", "......XXXX.")));
+    //print_r($k);
+
     for ($i = 0; $i < count($k); $i++) {
         $a = [];
         for ($j = 0; $j < count($k[0]); $j++) {
             $id = ($k[$i][$j] != 0 ? rand(10000, 99999) : 0);
-            $keeper[$id] = 1;
+            //$keeper[$id] = 1;
             $a[] = (object)array("id" => $id, "val" => $k[$i][$j]);
+            if ($k[$i][$j] == "M") {
+                $entryX = $i;
+                $entryY = $j;
+            }
+            if ($k[$i][$j] == "*") {
+                $exitX = $i;
+                $exitY = $j;
+            }
         }
         $matrix[] = $a;
     }
     unset($id);
 } else {
     $_fp = fopen("php://stdin", "r");
+    fscanf($_fp, "%d", $times);
+
     fscanf($_fp, "%d", $x);
     fscanf($_fp, "%d", $y);
     for ($i = 0; $i < $x; $i++) {
         $a = [];
-        foreach (explode(" ", trim(fgets($_fp))) as $val) {
+        foreach (explode(" ", trim(fgets($_fp))) as $j => $val) {
             $id = ($val != 0 ? rand(10000, 99999) : 0);
             $keeper[$id] = 1;
             $a[] = (object)array("id" => $id, "val" => $val);
+            if ($val == "M") {
+                $entryX = $i;
+                $entryY = $j;
+            }
+            if ($val == "*") {
+                $exitX = $i;
+                $exitY = $j;
+            }
         }
         $matrix[] = $a;
     }
     unset($id);
 }
-$jump = 1;
-for ($i = 0; $i < count($matrix); $i = $i + $jump) {
-    for ($j = 0; $j < count($matrix[0]); $j = $j + $jump) {
-        if ($matrix[$i][$j]->val == 1) {
-            //$matrix[$i][$j]->id = uniqid();
-            checkid($matrix, $keeper, $i, $j);
-        }
-    }
+$hops = 0;
+while ($pointX != $exitX && $pointY != $exitY) {
+    list($pointX, $pointY) = checkid($matrix, $keeper, $entryX, $entryY, $hops);
 }
-//print_r($matrix);
-echo max($keeper);
 
