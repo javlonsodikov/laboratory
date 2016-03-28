@@ -20,7 +20,7 @@ if (isset($_SERVER['ENVIRONMENT']) && $_SERVER['ENVIRONMENT'] == 'development') 
 while ($t--) {
     if (isset($_SERVER['ENVIRONMENT']) && $_SERVER['ENVIRONMENT'] == 'development') {
         $arr = array(4, 5, 7, 5);
-        $arr = array(1, 2, 3, 4, 5);
+        $arr = array(1, 2, 3);
 
     } else {
         fscanf($_fp, "%d", $len);
@@ -40,3 +40,18 @@ while ($t--) {
     }
     echo $xor . PHP_EOL;
 }
+
+die;
+//version 2
+
+$_fp = fopen("php://stdin", "r");
+
+$testCases = (int)trim(preg_replace('/\s\s+/', ' ', fgets($_fp)));
+$test = '011111111111111111111111111111111';
+$val = bindec($test);
+    for($i = 0; $i < $testCases; $i++){
+        $n = (int)trim(preg_replace('/\s\s+/', ' ', fgets($_fp)));
+        $bin = sprintf( "%032b",$n);
+        echo $val - bindec($bin)."\n";
+    }
+?>
